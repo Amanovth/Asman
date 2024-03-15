@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -65,7 +66,12 @@ class User(AbstractUser):
             return "Золото"
         else:
             return "No Status"
+    
+    def save(self):
+        super().save()
 
+        if not self.username:
+            self.username = f'user{self.pk}'
 
 class Payments(models.Model):
     user = models.ForeignKey(
