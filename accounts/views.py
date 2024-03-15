@@ -1,4 +1,4 @@
-from rest_framework import generics, status, views
+from rest_framework import generics, status, views, permissions
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate
@@ -8,7 +8,8 @@ from .services import generate_password, forgot_password
 from .serializers import (
     RegisterSerializer,
     VerifyEmailSerializer,
-    LoginSerializer
+    LoginSerializer,
+    UserInfoSerializer
 )
 
 
@@ -37,7 +38,7 @@ class VerifyEmailView(generics.GenericAPIView):
             try:
                 user = User.objects.get(email=email)
             except ObjectDoesNotExist:
-                return Response({'response':False})
+                return Response({'response': False})
 
             if user.v_code == v_code:
                 user.verified = True
@@ -75,9 +76,11 @@ class LoginView(generics.GenericAPIView):
 
 
 class ForgotPasswordView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated,]
+
     def post(self, request):
         email = request.data.get('email')
-        
+
         try:
             user = User.objects.get(email=email)
         except ObjectDoesNotExist:
@@ -93,3 +96,11 @@ class ForgotPasswordView(views.APIView):
         forgot_password(email, password)
 
         return Response({'response': True})
+
+
+class UserInfoView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get(self, request):
+        serializer = UserInfoSerializer(request.user)
+        return Response(serializer.data)
