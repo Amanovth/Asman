@@ -1,4 +1,5 @@
 asgiref==3.7.2
+backports.zoneinfo==0.2.1
 Django==4.2.11
 django-cors-headers==4.3.1
 django-jazzmin==2.6.0
@@ -7,9 +8,10 @@ drf-yasg==1.21.7
 gunicorn==21.2.0
 inflection==0.5.1
 packaging==24.0
+psycopg2-binary==2.9.9
 python-dotenv==1.0.1
 pytz==2024.1
 PyYAML==6.0.1
 sqlparse==0.4.4
-typing_extensions==4.10.0
+typing-extensions==4.10.0
 uritemplate==4.1.1
