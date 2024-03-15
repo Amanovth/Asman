@@ -1,4 +1,3 @@
-from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -72,6 +71,9 @@ class User(AbstractUser):
 
         if not self.username:
             self.username = f'user{self.pk}'
+            return super().save()
+        return
+
 
 class Payments(models.Model):
     user = models.ForeignKey(
