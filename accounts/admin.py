@@ -27,7 +27,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name')
     fieldsets = (
         (None, {'fields': ('coins', 'username',
-         'first_name', 'last_name', 'email', 'phone', 'profile_photo')}),
+         'first_name', 'last_name', 'email', 'phone', 'profile_photo', 'v_code', 'verified')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 

@@ -10,7 +10,7 @@ class User(AbstractUser):
     username = models.CharField(
         _("username"),
         max_length=150,
-        unique=True,
+        # unique=True,
         blank=True,
         error_messages={
             "unique": _("A user with that username already exists."),
@@ -48,12 +48,10 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
-    @property
     def token(self):
         token, created = Token.objects.get_or_create(user=self)
         return token.key
 
-    @property
     def status(self):
         if 100 <= self.coins < 500:
             return "Стандарт"
@@ -67,10 +65,9 @@ class User(AbstractUser):
             return "No Status"
     
     def save(self):
-        super().save()
 
         if not self.username:
-            self.username = f'user{self.pk}'
+            self.username = f'user{self.id}'
             return super().save()
         return
 

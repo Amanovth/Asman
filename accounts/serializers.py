@@ -43,9 +43,6 @@ class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
     v_code = serializers.CharField()
 
-    class Meta:
-        fields = ['email', 'v_code']
-
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
