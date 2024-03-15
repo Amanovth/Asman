@@ -63,13 +63,6 @@ class User(AbstractUser):
             return "Золото"
         else:
             return "No Status"
-    
-    def save(self):
-
-        if not self.username:
-            self.username = f'user{self.id}'
-            return super().save()
-        return
 
 
 class Payments(models.Model):
