@@ -47,7 +47,7 @@ class VerifyEmailView(generics.GenericAPIView):
 
                 return Response({'response': True, 'token': user.token()})
             return Response({'response': False, 'message': 'Введен неверный код'})
-        return Response(serializer.error)
+        return Response(serializer.errors)
 
 
 class LoginView(generics.GenericAPIView):
