@@ -37,6 +37,9 @@ class Partner(models.Model):
         editable=False,
         max_length=36
     )
+    cost_of_visit = models.FloatField(
+        'Стоимость посещения'
+    )
     cat = models.ForeignKey(
         PartnerCategory,
         verbose_name='Категория',
@@ -63,9 +66,6 @@ class Partner(models.Model):
     total_visits = models.IntegerField(
         'Всего посещений',
         default=0
-    )
-    cost_of_visit = models.FloatField(
-        'Стоимость посещения'
     )
     date_joined = models.DateTimeField(
         'Дата регистрации',

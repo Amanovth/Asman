@@ -70,7 +70,7 @@ def make_transfer(instance):
 
 
 def make_payment(instance):
-    amount = instance.amount
+    amount = instance.partner.cost_of_visit
     user = instance.user
     partner = instance.partner
 

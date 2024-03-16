@@ -104,10 +104,3 @@ class UserInfoView(views.APIView):
     def get(self, request):
         serializer = UserInfoSerializer(request.user)
         return Response(serializer.data)
-
-
-class TransferView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def post(self, request):
-        user_id = request.data

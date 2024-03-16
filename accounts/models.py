@@ -1,5 +1,4 @@
 import uuid
-
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
@@ -79,34 +78,6 @@ class User(AbstractUser):
             return "No Status"
 
 
-class Payment(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, verbose_name='Пользователь'
-    )
-    amount = models.FloatField(
-        'Сумма',
-    )
-    info = models.CharField(
-        max_length=255
-    )
-    partner = models.ForeignKey(
-        Partner,
-        verbose_name='Партнер',
-        on_delete=models.DO_NOTHING
-    )
-    operation_time = models.DateTimeField(
-        'Дата операции',
-        default=timezone.now
-    )
-
-    def __str__(self):
-        return f"Платеж {self.operation_time}"
-
-    class Meta:
-        verbose_name = 'Покупка услуги'
-        verbose_name_plural = 'Покупки услуг'
-
-
 class BuyAsman(models.Model):
     STATUS_CHOICES = (
         (1, 'Подтверждено'),
@@ -121,6 +92,8 @@ class BuyAsman(models.Model):
     )
     amount = models.FloatField(
         'Сумма',
+        null=True,
+        blank=True
     )
     img = models.ImageField(
         'Скриншот транзакции',
@@ -134,10 +107,6 @@ class BuyAsman(models.Model):
     operation_time = models.DateTimeField(
         'Дата операции',
         default=timezone.now
-    )
-    processed = models.BooleanField(
-        'Обработано',
-        default=False
     )
 
     def __str__(self):
@@ -172,10 +141,6 @@ class WithdrawalAsman(models.Model):
         'Дата операции',
         default=timezone.now
     )
-    processed = models.BooleanField(
-        'Обработано',
-        default=False
-    )
 
     def __str__(self):
         return f"Вывод от {self.user.email}"
@@ -183,6 +148,28 @@ class WithdrawalAsman(models.Model):
     class Meta:
         verbose_name = 'Вывод Asman'
         verbose_name_plural = 'Выводы Asman'
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name='Пользователь'
+    )
+    partner = models.ForeignKey(
+        Partner,
+        verbose_name='Партнер',
+        on_delete=models.DO_NOTHING
+    )
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now
+    )
+
+    def __str__(self):
+        return f"Платеж {self.operation_time}"
+
+    class Meta:
+        verbose_name = 'Покупка услуги'
+        verbose_name_plural = 'Покупки услуг'
 
 
 class Transfer(models.Model):
