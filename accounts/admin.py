@@ -26,7 +26,7 @@ class PaymentsInline(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'email', 'first_name', 'last_name')
     fieldsets = (
-        (None, {'fields': ('coins', 'username', 'first_name', 'last_name', 
+        (None, {'fields': ('is_active', 'coins', 'username', 'first_name', 'last_name',
         'email', 'phone', 'profile_photo', 'v_code', 'verified', 'qr')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )

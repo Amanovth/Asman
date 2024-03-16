@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.utils import timezone
 from ckeditor.fields import RichTextField
 
 
@@ -24,6 +25,12 @@ class PartnerCategory(models.Model):
 
 
 class Partners(models.Model):
+    is_active = models.BooleanField(
+        'Активность',
+        help_text='Отметьте, если партнер должен считаться активным. '
+                  'Уберите эту отметку вместо удаления записи.',
+        default=True
+    )
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -60,9 +67,9 @@ class Partners(models.Model):
     cost_of_visit = models.FloatField(
         'Стоимость посещения'
     )
-    is_active = models.BooleanField(
-        'Is active',
-        default=True
+    date_joined = models.DateTimeField(
+        'Дата регистрации',
+        default=timezone.now
     )
 
     def __str__(self):
