@@ -3,8 +3,8 @@ from django.apps import AppConfig
 
 class DiscountConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'discount'
+    name = 'src.discount'
     verbose_name = 'Скидки'
 
     def ready(self):
-        import discount.signals
+        import src.discount.signals

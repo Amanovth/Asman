@@ -7,7 +7,7 @@ from .models import (
     Payment,
     Transfer
 )
-from .payment_serializer import (
+from .serializers import (
     TransferSerializer,
     PaymentSerializer,
     BuyAsmanSerializer

@@ -6,8 +6,9 @@ from .yasg import urlpatterns as docs
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
-    path('api/', include('accounts.urls')),
-    path('api/discount/', include('discount.urls')),
+    path('api/auth/', include('src.accounts.urls')),
+    path('api/payment/', include('src.payments.urls')),
+    path('api/discount/', include('src.discount.urls')),
     path('api/ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

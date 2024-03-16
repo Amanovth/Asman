@@ -27,9 +27,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'ckeditor',
-    'accounts',
-    'discount',
-    'market',
+
+    # local apps
+    'src.accounts',
+    'src.discount',
+    'src.payments',
+    'src.market',
 ]
 
 MIDDLEWARE = [
