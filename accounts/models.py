@@ -18,7 +18,6 @@ class User(AbstractUser):
     qr = models.ImageField(
         'QR',
         null=True, blank=True,
-        editable=False,
     )
     username = models.CharField(
         _("username"),
