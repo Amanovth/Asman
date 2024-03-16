@@ -76,7 +76,7 @@ class LoginView(generics.GenericAPIView):
 
 
 class ForgotPasswordView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def post(self, request):
         email = request.data.get('email')
@@ -99,8 +99,15 @@ class ForgotPasswordView(views.APIView):
 
 
 class UserInfoView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request):
         serializer = UserInfoSerializer(request.user)
         return Response(serializer.data)
+
+
+class TransferView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def post(self, request):
+        user_id = request.data

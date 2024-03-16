@@ -1,10 +1,12 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token
 
+from discount.models import Partner
 from .managers import CustomUserManager
 
 
@@ -46,7 +48,7 @@ class User(AbstractUser):
         'Подтверждено',
         default=False
     )
-    coins = models.FloatField(
+    balance = models.FloatField(
         'Количество монет',
         default=0
     )
@@ -77,48 +79,65 @@ class User(AbstractUser):
             return "No Status"
 
 
-class Payments(models.Model):
+class Payment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, verbose_name='Пользователь'
     )
-    coins = models.FloatField(
-        'Количество монет'
-    )
-    created_at = models.DateTimeField(
-        'Дата операции',
-        auto_now_add=True
+    amount = models.FloatField(
+        'Сумма',
     )
     info = models.CharField(
         max_length=255
     )
+    partner = models.ForeignKey(
+        Partner,
+        verbose_name='Партнер',
+        on_delete=models.DO_NOTHING
+    )
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now
+    )
 
     def __str__(self):
-        return f"Платеж {self.datetime}"
+        return f"Платеж {self.operation_time}"
 
     class Meta:
-        verbose_name = 'Платеж'
-        verbose_name_plural = 'Платежи'
+        verbose_name = 'Покупка услуги'
+        verbose_name_plural = 'Покупки услуг'
 
 
-class BuyAsmanRequest(models.Model):
+class BuyAsman(models.Model):
     STATUS_CHOICES = (
-        (1, 'Подтвержденно'),
-        (0, 'Отклоненно'),
+        (1, 'Подтверждено'),
+        (0, 'Отклонено'),
+        (2, '')
     )
 
     user = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
-    screenshot = models.ImageField(
-        'Скриншот транзакции', upload_to='buy_asman'
+        User,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Пользователь'
+    )
+    amount = models.FloatField(
+        'Сумма',
+    )
+    img = models.ImageField(
+        'Скриншот транзакции',
+        upload_to='buy_asman'
     )
     status = models.IntegerField(
-        'Статус', choices=STATUS_CHOICES, default=1
+        'Статус',
+        choices=STATUS_CHOICES,
+        default=2
     )
-    created_at = models.DateTimeField(
-        'Дата операции', auto_now_add=True
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now
     )
     processed = models.BooleanField(
-        'Обработано', default=False
+        'Обработано',
+        default=False
     )
 
     def __str__(self):
@@ -127,3 +146,69 @@ class BuyAsmanRequest(models.Model):
     class Meta:
         verbose_name = 'Покупка Asman'
         verbose_name_plural = 'Покупки Asman'
+
+
+class WithdrawalAsman(models.Model):
+    STATUS_CHOICES = (
+        (1, 'Подтверждено'),
+        (0, 'Отклонено'),
+        (2, '')
+    )
+
+    user = models.ForeignKey(
+        User,
+        verbose_name='Пользователь',
+        on_delete=models.DO_NOTHING
+    )
+    amount = models.FloatField(
+        'Сумма',
+    )
+    status = models.IntegerField(
+        'Статус',
+        choices=STATUS_CHOICES,
+        default=2
+    )
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now
+    )
+    processed = models.BooleanField(
+        'Обработано',
+        default=False
+    )
+
+    def __str__(self):
+        return f"Вывод от {self.user.email}"
+
+    class Meta:
+        verbose_name = 'Вывод Asman'
+        verbose_name_plural = 'Выводы Asman'
+
+
+class Transfer(models.Model):
+    payer = models.ForeignKey(
+        User,
+        verbose_name='Плательщик',
+        on_delete=models.DO_NOTHING,
+        related_name='payer',
+    )
+    recipient = models.ForeignKey(
+        User,
+        verbose_name='Получатель',
+        on_delete=models.DO_NOTHING,
+        related_name='recipient'
+    )
+    amount = models.FloatField(
+        'Сумма',
+    )
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now,
+    )
+
+    def __str__(self):
+        return f"{self.payer.email} > {self.recipient.email}"
+
+    class Meta:
+        verbose_name = 'Перевод'
+        verbose_name_plural = 'Переводы'

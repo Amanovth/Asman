@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .models import PartnerCategory, Partners
+from .models import PartnerCategory, Partner
 from .serializers import (
     DiscountListSerializer,
     PartnersSerializer
@@ -13,6 +13,6 @@ class DiscountListView(generics.ListAPIView):
 
 
 class DiscountDetailView(generics.RetrieveAPIView):
-    queryset = Partners.objects.all()
+    queryset = Partner.objects.all()
     serializer_class = PartnersSerializer
     lookup_field = 'id'

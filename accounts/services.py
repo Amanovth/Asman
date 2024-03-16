@@ -35,10 +35,49 @@ def forgot_password(email, password):
 
 
 def generate_user_qrcode(instance):
-    qr = qrcode.make(str(instance.id), border=2)
+    qr = qrcode.make(f'{instance.id}?type=1', border=2)
     qr_path = f"user_qrcodes/{instance.id}.png"
     qr.save(os.path.join(settings.MEDIA_ROOT, qr_path))
     instance.qr.name = qr_path
     instance.save()
 
     return instance
+
+
+def get_payment_type(payment_type):
+    payment_types = {
+        1: 'Покупка Asman',
+        2: 'Ввод Asman',
+        3: 'Вывод Asman',
+        4: 'Покупка услуги',
+        5: 'Перевод между пользователями'
+    }
+    return payment_types.get(payment_type, 'Неизвестный тип платежа')
+
+
+def make_transfer(instance):
+    amount = instance.amount
+    payer = instance.payer
+    recipient = instance.recipient
+
+    payer.balance -= amount
+    recipient.balance += amount
+
+    payer.save()
+    recipient.save()
+
+    return
+
+
+def make_payment(instance):
+    amount = instance.amount
+    user = instance.user
+    partner = instance.partner
+
+    user.balance -= amount
+    partner.total_visits += 1
+
+    user.save()
+    partner.save()
+
+    return

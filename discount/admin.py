@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Partners, PartnerCategory
+from .models import Partner, PartnerCategory
 
 
 @admin.register(PartnerCategory)
@@ -10,7 +10,7 @@ class PartnerCategoryAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
 
 
-@admin.register(Partners)
+@admin.register(Partner)
 class PartnersAdmin(admin.ModelAdmin):
     list_display = ('title', 'cat', 'get_html_img')
     list_display_links = ('title',)

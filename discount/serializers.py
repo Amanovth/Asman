@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from .models import PartnerCategory, Partners
+from .models import PartnerCategory, Partner
 
 
 class PartnersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Partners
+        model = Partner
         fields = ['id', 'title', 'description', 'img']
 
 

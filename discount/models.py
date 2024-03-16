@@ -24,7 +24,7 @@ class PartnerCategory(models.Model):
         verbose_name_plural = 'Категории партнеров'
 
 
-class Partners(models.Model):
+class Partner(models.Model):
     is_active = models.BooleanField(
         'Активность',
         help_text='Отметьте, если партнер должен считаться активным. '
