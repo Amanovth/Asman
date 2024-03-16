@@ -1,5 +1,7 @@
+import os
 import string
 import random
+import qrcode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -30,3 +32,13 @@ def forgot_password(email, password):
     email = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [email])
     email.content_subtype = "html"
     email.send()
+
+
+def generate_user_qrcode(instance):
+        qr = qrcode.make(str(instance.id), border=2)
+        qr_path = f"user_qrcodes/{instance.id}.png"
+        qr.save(os.path.join(settings.MEDIA_ROOT, qr_path))
+        instance.qr.name = qr_path
+        instance.save()
+
+        return instance
