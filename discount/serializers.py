@@ -6,7 +6,7 @@ from .models import PartnerCategory, Partners
 class PartnersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partners
-        fields = ['title', 'description', 'img']
+        fields = ['id', 'title', 'description', 'img']
 
 
 class DiscountListSerializer(serializers.ModelSerializer):

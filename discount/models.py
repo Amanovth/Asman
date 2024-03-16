@@ -1,8 +1,15 @@
+import uuid
 from django.db import models
 from ckeditor.fields import RichTextField
 
 
 class PartnerCategory(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        max_length=36
+    )
     name = models.CharField(
         'Название',
         max_length=255
@@ -17,6 +24,12 @@ class PartnerCategory(models.Model):
 
 
 class Partners(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        max_length=36
+    )
     cat = models.ForeignKey(
         PartnerCategory,
         verbose_name='Категория',
