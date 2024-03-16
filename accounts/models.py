@@ -16,7 +16,7 @@ class User(AbstractUser):
         max_length=36
     )
     qr = models.ImageField(
-        'QR', 
+        'QR',
         null=True, blank=True,
         editable=False,
     )
