@@ -2,7 +2,9 @@ import random
 from rest_framework import serializers
 
 from .models import User
-from .services import send_verification_mail
+from .services import send_verification_mail, calculate_user_status
+
+from src.payments.models import AsmanRate
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -53,10 +55,14 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name',
-                  'profile_photo', 'coins', 'status', 'qr']
+                  'profile_photo', 'balance', 'status', 'qr']
 
+    def get_status(self, obj):
+        asman_rate = AsmanRate.objects.first()
 
+        return calculate_user_status(obj.balance, asman_rate)

@@ -5,6 +5,21 @@ from src.accounts.models import User
 from src.discount.models import Partner
 
 
+class AsmanRate(models.Model):
+    rate = models.FloatField('Курс')
+    standard = models.FloatField('Стандарт')
+    bronze = models.FloatField('Бронза')
+    silver = models.FloatField('Серебро')
+    gold = models.FloatField('Золото')
+
+    def __str__(self):
+        return 'Курс Asman и Статусы'
+
+    class Meta:
+        verbose_name = 'Курс Asman и Статусы'
+        verbose_name_plural = 'Курс Asman и Статусы'
+
+
 class BuyAsman(models.Model):
     STATUS_CHOICES = (
         (1, 'Подтверждено'),
@@ -35,13 +50,31 @@ class BuyAsman(models.Model):
         'Дата операции',
         default=timezone.now
     )
+    processed = models.BooleanField(
+        default=False
+    )
 
     def __str__(self):
         return f"Покупка от {self.user.email}"
 
     class Meta:
         verbose_name = 'Покупка Asman'
-        verbose_name_plural = 'Покупки Asman'
+        verbose_name_plural = 'Asman (покупки)'
+
+    def confirm_purchase(self):
+        if self.processed:
+            return False
+        if self.status == 1 and self.amount:
+            self.user.balance += self.amount
+            self.user.save()
+            return True
+        if self.status == 0:
+            return True
+
+    def save(self, *args, **kwargs):
+        if self.confirm_purchase():
+            self.processed = True
+        super().save(*args, **kwargs)
 
 
 class WithdrawalAsman(models.Model):
@@ -74,7 +107,7 @@ class WithdrawalAsman(models.Model):
 
     class Meta:
         verbose_name = 'Вывод Asman'
-        verbose_name_plural = 'Выводы Asman'
+        verbose_name_plural = 'Asman (выводы)'
 
 
 class Payment(models.Model):

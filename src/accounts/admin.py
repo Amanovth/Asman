@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'email', 'first_name', 'last_name')
     fieldsets = (
         (None, {'fields': ('balance', 'username', 'first_name', 'last_name',
-                           'email', 'phone', 'is_active', 'profile_photo', 'v_code', 'verified', 'qr',)}),
+                           'email', 'phone', 'profile_photo', 'v_code', 'verified', 'qr',)}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     readonly_fields = ('verified', 'v_code', 'qr', 'profile_photo')

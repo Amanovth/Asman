@@ -62,15 +62,3 @@ class User(AbstractUser):
     def token(self):
         token, created = Token.objects.get_or_create(user=self)
         return token.key
-
-    def status(self):
-        if 100 <= self.coins < 500:
-            return "Стандарт"
-        elif 500 <= self.coins < 1000:
-            return "Бронза"
-        elif 1000 <= self.coins < 5000:
-            return "Серебро"
-        elif self.coins >= 5000:
-            return "Золото"
-        else:
-            return "No Status"

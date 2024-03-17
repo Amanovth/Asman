@@ -42,3 +42,16 @@ def generate_user_qrcode(instance):
     instance.save()
 
     return instance
+
+
+def calculate_user_status(user_rate, asman_rate):
+    if user_rate >= asman_rate.gold:
+        return 'Золото'
+    elif user_rate >= asman_rate.silver:
+        return 'Серебро'
+    elif user_rate >= asman_rate.bronze:
+        return 'Бронза'
+    elif user_rate >= asman_rate.standard:
+        return 'Стандарт'
+    else:
+        return 'Unknown'
