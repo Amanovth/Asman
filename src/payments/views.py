@@ -5,12 +5,14 @@ from .models import (
     BuyAsman,
     WithdrawalAsman,
     Payment,
-    Transfer
+    Transfer,
+    AsmanRate
 )
 from .serializers import (
     TransferSerializer,
     PaymentSerializer,
-    BuyAsmanSerializer
+    BuyAsmanSerializer,
+    AsmanRateSerializer
 )
 
 
@@ -52,3 +54,13 @@ class BuyAsmanView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class AsmanRateView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = AsmanRateSerializer
+
+    def get(self, request):
+        queryset = AsmanRate.objects.first()
+        serializer = self.serializer_class(queryset)
+        return Response(serializer.data)
