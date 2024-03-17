@@ -11,6 +11,7 @@ class AsmanRate(models.Model):
     bronze = models.FloatField('Бронза')
     silver = models.FloatField('Серебро')
     gold = models.FloatField('Золото')
+    vip = models.FloatField('VIP')
 
     def __str__(self):
         return 'Курс Asman и Статусы'

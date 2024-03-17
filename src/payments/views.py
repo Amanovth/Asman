@@ -17,7 +17,7 @@ from .serializers import (
 
 
 class ScannerView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated, ]
+    # permission_classes = [permissions.IsAuthenticated, ]
 
     def get_serializer_class(self):
         payment_type = self.request.query_params.get('type')

@@ -12,7 +12,7 @@ from .models import (
 
 @admin.register(AsmanRate)
 class AsmanRateAdmin(admin.ModelAdmin):
-    list_display = ('rate', 'standard', 'bronze', 'silver', 'gold')
+    list_display = ('rate', 'standard', 'bronze', 'silver', 'gold', 'vip')
 
     def has_add_permission(self, request):
         if self.model.objects.count() >= 1:
