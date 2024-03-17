@@ -56,6 +56,8 @@ class LoginSerializer(serializers.Serializer):
 
 class UserInfoSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
+    profile_photo = serializers.SerializerMethodField()
+    qr = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -66,3 +68,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
         asman_rate = AsmanRate.objects.first()
 
         return calculate_user_status(obj.balance, asman_rate)
+
+    def get_qr(self, obj):
+        if obj.qr:
+            return f"http://62.109.17.80/{obj.qr.url}"
+
+    def get_profile_photo(self, obj):
+        if obj.qr:
+            return f"http://62.109.17.80/{obj.profile_photo.url}"
