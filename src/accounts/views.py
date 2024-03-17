@@ -21,7 +21,7 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
-            return Response({'reponse': True}, status=status.HTTP_201_CREATED)
+            return Response({'response': True}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
 
 
@@ -104,3 +104,15 @@ class UserInfoView(views.APIView):
     def get(self, request):
         serializer = UserInfoSerializer(request.user)
         return Response(serializer.data)
+
+
+class ChangePasswordView(views.APIView):
+    def post(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('password')
+        confirm_password = request.data.get('confirm_password')
+
+        if new_password != confirm_password:
+            return Response({'response': False,
+                             # 'message':
+                             })
