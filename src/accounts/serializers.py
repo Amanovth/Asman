@@ -76,3 +76,9 @@ class UserInfoSerializer(serializers.ModelSerializer):
     def get_profile_photo(self, obj):
         if obj.qr:
             return f"http://62.109.17.80/{obj.profile_photo.url}"
+
+
+class UpdatePhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['profile_photo', ]

@@ -10,7 +10,8 @@ from .serializers import (
     RegisterSerializer,
     VerifyEmailSerializer,
     LoginSerializer,
-    UserInfoSerializer
+    UserInfoSerializer,
+    UpdatePhotoSerializer
 )
 
 
@@ -126,3 +127,16 @@ class ChangePasswordView(views.APIView):
         user.save()
 
         return Response({'response': True})
+
+
+class UpdatePhotoView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def post(self, request):
+        serializer = UpdatePhotoSerializer(
+            instance=request.user, data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"response": True, "message": "Успешно обновлено"})
+        return Response({"response": False})
