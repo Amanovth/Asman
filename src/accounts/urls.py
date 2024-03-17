@@ -5,6 +5,7 @@ from .views import (
     VerifyEmailView,
     LoginView,
     ForgotPasswordView,
+    ChangePasswordView,
     UserInfoView,
 )
 
@@ -14,6 +15,6 @@ urlpatterns = [
     path('verify-email/', VerifyEmailView.as_view(), name='auth-verify-email'),
     path('login/', LoginView.as_view(), name='auth-login'),
     path('forgot-password/', ForgotPasswordView.as_view(), name='auth-forgot-password'),
+    path('change-password/', ChangePasswordView.as_view(), name='auth-change-password'),
     path('user-info/', UserInfoView.as_view(), name='auth-user-info'),
-    # path('profile/', ProfileView.as_view(), name='auth-profile')
 ]

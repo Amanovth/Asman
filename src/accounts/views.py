@@ -2,6 +2,7 @@ from rest_framework import generics, status, views, permissions
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 
 from .models import User
 from .services import generate_password, forgot_password
@@ -107,12 +108,21 @@ class UserInfoView(views.APIView):
 
 
 class ChangePasswordView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
     def post(self, request):
+        user = request.user
         old_password = request.data.get('old_password')
-        new_password = request.data.get('password')
+        new_password = request.data.get('new_password')
         confirm_password = request.data.get('confirm_password')
 
         if new_password != confirm_password:
-            return Response({'response': False,
-                             # 'message':
-                             })
+            return Response({'response': False, 'message': 'Новый пароль и подтверждение пароля не совпадают.'})
+
+        if not check_password(old_password, user.password):
+            return Response({'response': False, 'message': 'Текущий пароль неверен'})
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({'response': True})
