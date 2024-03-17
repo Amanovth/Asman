@@ -59,7 +59,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name',
+        fields = ['first_name', 'last_name', 'email', 'phone'
                   'profile_photo', 'balance', 'status', 'qr']
 
     def get_status(self, obj):
