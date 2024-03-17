@@ -79,6 +79,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UpdatePhotoSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.ImageField(required=True)
     class Meta:
         model = User
         fields = ['profile_photo', ]
