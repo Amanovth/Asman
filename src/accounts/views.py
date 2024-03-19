@@ -100,12 +100,12 @@ class ForgotPasswordView(views.APIView):
         return Response({'response': True})
 
 
-class UserInfoView(views.APIView):
+class UserInfoView(generics.RetrieveAPIView):
+    serializer_class = UserInfoSerializer
     permission_classes = [permissions.IsAuthenticated, ]
 
-    def get(self, request):
-        serializer = UserInfoSerializer(request.user)
-        return Response(serializer.data)
+    def get_object(self):
+        return self.request.user
 
 
 class ChangePasswordView(views.APIView):
