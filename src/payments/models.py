@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils import timezone
 
@@ -160,3 +161,26 @@ class Transfer(models.Model):
     class Meta:
         verbose_name = 'Перевод'
         verbose_name_plural = 'Переводы'
+
+
+class History(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        max_length=36
+    )
+    user = models.ForeignKey(
+        User,
+        verbose_name='Плательщик',
+        on_delete=models.DO_NOTHING
+    )
+    info = models.CharField(
+        'Тип платежа',
+        max_length=255
+    )
+    total = models.FloatField('Сумма')
+    operation_time = models.DateTimeField(
+        'Дата операции',
+        default=timezone.now,
+    )

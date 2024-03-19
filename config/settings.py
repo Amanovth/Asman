@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'src.discount',
     'src.payments',
     'src.market',
+    'src.main',
 ]
 
 MIDDLEWARE = [
