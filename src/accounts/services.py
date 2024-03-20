@@ -57,3 +57,4 @@ def calculate_user_status(user_rate, asman_rate):
         return 'Стандарт'
     else:
         return 'Unknown'
+

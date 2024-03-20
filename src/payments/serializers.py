@@ -30,4 +30,4 @@ class BuyAsmanSerializer(serializers.ModelSerializer):
 class AsmanRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AsmanRate
-        fields = ['rate', 'standard', 'bronze', 'silver', 'gold']
+        fields = ['rate', 'standard', 'bronze', 'silver', 'gold', 'vip']
