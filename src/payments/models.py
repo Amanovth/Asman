@@ -18,8 +18,8 @@ class AsmanRate(models.Model):
         return 'Курс Asman и Статусы'
 
     class Meta:
-        verbose_name = 'Курс Asman и Статусы'
-        verbose_name_plural = 'Курс Asman и Статусы'
+        verbose_name = 'Asman (курс и статус)'
+        verbose_name_plural = 'Asman (курс и статус)'
 
 
 class BuyAsman(models.Model):
