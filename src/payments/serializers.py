@@ -6,7 +6,6 @@ from .models import (
     WithdrawalAsman,
     Payment,
     Transfer,
-    AsmanRate,
     History
 )
 
@@ -27,12 +26,6 @@ class BuyAsmanSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyAsman
         fields = ['img', ]
-
-
-class AsmanRateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AsmanRate
-        fields = ['rate', 'standard', 'bronze', 'silver', 'gold', 'vip']
 
 
 class PaymentHistorySerializer(serializers.ModelSerializer):

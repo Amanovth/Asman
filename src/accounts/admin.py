@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
-from .models import User
+from .models import User, UserStatuses
 from src.payments.admin import BuyAsmanInline, PaymentsInline
 
 
@@ -21,4 +21,15 @@ class CustomUserAdmin(UserAdmin):
     inlines = (BuyAsmanInline, PaymentsInline)
 
 
+@admin.register(UserStatuses)
+class UserStatusesAdmin(admin.ModelAdmin):
+    list_display = ('standard', 'bronze', 'silver', 'gold', 'vip')
+
+    def has_add_permission(self, request):
+        if self.model.objects.count() >= 1:
+            return False
+        return super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 # admin.site.unregister(Group)

@@ -1,10 +1,8 @@
 import random
 from rest_framework import serializers
 
-from .models import User
+from .models import User, UserStatuses
 from .services import send_verification_mail, calculate_user_status
-
-from src.payments.models import AsmanRate
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -63,7 +61,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
                   'profile_photo', 'balance', 'status', 'qr']
 
     def get_status(self, obj):
-        asman_rate = AsmanRate.objects.first()
+        asman_rate = UserStatuses.objects.first()
 
         return calculate_user_status(obj.balance, asman_rate)
 

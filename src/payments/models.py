@@ -6,22 +6,6 @@ from src.accounts.models import User
 from src.discount.models import Partner
 
 
-class AsmanRate(models.Model):
-    rate = models.FloatField('Курс')
-    standard = models.FloatField('Стандарт')
-    bronze = models.FloatField('Бронза')
-    silver = models.FloatField('Серебро')
-    gold = models.FloatField('Золото')
-    vip = models.FloatField('VIP')
-
-    def __str__(self):
-        return 'Курс Asman и Статусы'
-
-    class Meta:
-        verbose_name = 'Asman (курс и статус)'
-        verbose_name_plural = 'Asman (курс и статус)'
-
-
 class BuyAsman(models.Model):
     STATUS_CHOICES = (
         (1, 'Подтверждено'),

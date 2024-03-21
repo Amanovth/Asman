@@ -62,3 +62,18 @@ class User(AbstractUser):
     def token(self):
         token, created = Token.objects.get_or_create(user=self)
         return token.key
+
+
+class UserStatuses(models.Model):
+    standard = models.FloatField('Стандарт')
+    bronze = models.FloatField('Бронза')
+    silver = models.FloatField('Серебро')
+    gold = models.FloatField('Золото')
+    vip = models.FloatField('VIP')
+
+    def __str__(self):
+        return 'Статус'
+
+    class Meta:
+        verbose_name = 'Статус'
+        verbose_name_plural = 'Статусы'

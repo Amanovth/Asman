@@ -6,22 +6,8 @@ from .models import (
     Payment,
     WithdrawalAsman,
     Transfer,
-    AsmanRate,
     History
 )
-
-
-@admin.register(AsmanRate)
-class AsmanRateAdmin(admin.ModelAdmin):
-    list_display = ('rate', 'standard', 'bronze', 'silver', 'gold', 'vip')
-
-    def has_add_permission(self, request):
-        if self.model.objects.count() >= 1:
-            return False
-        return super().has_add_permission(request)
-
-    def has_delete_permission(self, request, obj=None):
-        return False
 
 
 class BuyAsmanInline(admin.StackedInline):

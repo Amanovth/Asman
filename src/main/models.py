@@ -24,3 +24,31 @@ class StoryVideos(models.Model):
 
     def __str__(self) -> str:
         return self.created_at.strftime("%d %B %Y г. %H:%M")
+
+
+class Wallets(models.Model):
+    asman = models.CharField(
+        'Asman',
+        max_length=255
+    )
+    usdt = models.CharField(
+        'USDT',
+        max_length=255
+    )
+
+    def __str__(self):
+        return 'Кошелек'
+
+    class Meta:
+        verbose_name = 'Кошелек'
+        verbose_name_plural = 'Кошельки'
+
+
+class AsmanRate(models.Model):
+    rate = models.FloatField(
+        'Курс'
+    )
+
+    class Meta:
+        verbose_name = 'Курс Asman'
+        verbose_name_plural = 'Курс Asman'
