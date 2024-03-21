@@ -48,6 +48,16 @@ def make_transfer_on_save(sender, instance, created, **kwargs):
         History.objects.create(
             user=instance.payer,
             recipient=instance.recipient,
+            type=2,
+            status=1,
+            info="Перевод",
+            total=instance.amount,
+            operation_time=instance.operation_time
+        )
+        History.objects.create(
+            user=instance.recipient,
+            # recipient=instance.recipient,
+            type=1,
             status=1,
             info="Перевод",
             total=instance.amount,

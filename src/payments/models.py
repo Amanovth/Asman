@@ -246,6 +246,7 @@ class History(models.Model):
         choices=STATUS_CHOICES,
         default=2
     )
+    type = models.IntegerField()
 
     def __str__(self):
         return self.user.email
