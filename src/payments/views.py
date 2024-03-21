@@ -89,13 +89,29 @@ class PaymentHistoryView(generics.ListAPIView):
     serializer_class = PaymentHistorySerializer
 
     def get_queryset(self):
-        days = timezone.now() - timedelta(days=int(self.request.query_params.get('days', 7)))
-        return History.objects.filter(user=self.request.user, operation_time__gte=days).annotate(
-            date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+        datefrom = self.request.query_params.get('datefrom', None)
+        dateto = self.request.query_params.get('dateto', None)
+
+        queryset = History.objects.filter(user=self.request.user)
+
+        if datefrom:
+            queryset = queryset.filter(operation_time__gte=datefrom)
+        if dateto:
+            queryset = queryset.filter(operation_time__lte=dateto)
+
+        if not datefrom or dateto:
+            queryset = queryset.filter(operation_time__gte=timezone.now() - timedelta(days=7))
+
+        return queryset.annotate(
+            date=TruncDate('operation_time')
+        ).values('date').annotate(
+            history_list=Count('pk')
+        ).order_by('-date')
 
     def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
         serialized_data = []
-        for entry in self.get_queryset():
+        for entry in queryset:
             history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
             serialized_history = self.serializer_class(history_objects, many=True).data
             serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
