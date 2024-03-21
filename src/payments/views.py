@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from django.db.models.functions import TruncDate
@@ -75,10 +77,15 @@ class PaymentHistoryView(generics.ListAPIView):
     serializer_class = PaymentHistorySerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = History.objects.filter(user=self.request.user).annotate(date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+        # Calculate the date 7 days ago from today
+        date_7_days_ago = timezone.now() - timedelta(days=1)
+
+        # Filter the queryset to include only the last 7 days of history
+        queryset = History.objects.filter(user=self.request.user, operation_time__gte=date_7_days_ago).annotate(date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+
         serialized_data = []
         for entry in queryset:
             history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
             serialized_history = self.serializer_class(history_objects, many=True).data
-            serialized_data.append({'date': entry['date'], 'list': serialized_history})
+            serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
         return Response(serialized_data)
