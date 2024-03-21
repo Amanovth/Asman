@@ -93,7 +93,7 @@ class TransferAdmin(admin.ModelAdmin):
 
 @admin.register(History)
 class HistoryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'info', 'get_recipient', 'total', 'operation_time')
+    list_display = ('user', 'status', 'info', 'get_recipient', 'total', 'operation_time')
     readonly_fields = ('user', 'info', 'total', 'operation_time', 'partner', 'recipient')
 
     def get_recipient(self, object):

@@ -55,6 +55,12 @@ class BuyAsman(models.Model):
     processed = models.BooleanField(
         default=False
     )
+    history = models.ForeignKey(
+        'History',
+        verbose_name='Покупка Asman',
+        on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
 
     def __str__(self):
         return f"Покупка от {self.user.email}"
@@ -70,8 +76,16 @@ class BuyAsman(models.Model):
         if self.status == 1 and self.amount:
             self.user.balance += self.amount
             self.user.save()
+
+            if self.history:
+                self.history.status = 1
+                self.history.total = self.amount
+                self.history.save()
             return True
         if self.status == 0:
+            if self.history:
+                self.history.status = 0
+                self.history.save()
             return True
 
     def save(self, *args, **kwargs):
@@ -170,7 +184,7 @@ class Transfer(models.Model):
 class History(models.Model):
     STATUS_CHOICES = (
         (1, 'Успешно'),
-        (0, 'Ошибка'),
+        (0, 'Отклонено'),
         (2, 'В обработке')
     )
     id = models.UUIDField(

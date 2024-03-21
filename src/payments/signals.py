@@ -16,10 +16,17 @@ from .services import (
 @receiver(post_save, sender=BuyAsman)
 def create_history(sender, instance, created, **kwargs):
     if created:
-        History.objects.create(
+        obj = History.objects.create(
             user=instance.user,
-            status=1
+            status=instance.status,
+            info='Покупка Asman',
+            total=0,
+            operation_time=instance.operation_time
         )
+        instance.history = obj
+        instance.save()
+
+
 @receiver(post_save, sender=Transfer)
 def make_transfer_on_save(sender, instance, created, **kwargs):
     if created:
