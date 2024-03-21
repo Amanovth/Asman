@@ -68,24 +68,6 @@ class BuyAsmanView(generics.CreateAPIView):
         return Response({'response': False})
 
 
-class PaymentHistoryView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-    serializer_class = PaymentHistorySerializer
-
-    def get_queryset(self):
-        days = timezone.now() - timedelta(days=int(self.request.query_params.get('days')))
-        return History.objects.filter(user=self.request.user, operation_time__gte=days).annotate(
-            date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
-
-    def list(self, request, *args, **kwargs):
-        serialized_data = []
-        for entry in self.get_queryset():
-            history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
-            serialized_history = self.serializer_class(history_objects, many=True).data
-            serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
-        return Response(serialized_data)
-
-
 class WithdrawalView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
     queryset = WithdrawalAsman.objects.all()
@@ -100,3 +82,21 @@ class WithdrawalView(generics.CreateAPIView):
             self.perform_create(serializer)
             return Response({'response': True})
         return Response({'response': False})
+
+
+class PaymentHistoryView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = PaymentHistorySerializer
+
+    def get_queryset(self):
+        days = timezone.now() - timedelta(days=int(self.request.query_params.get('days', 7)))
+        return History.objects.filter(user=self.request.user, operation_time__gte=days).annotate(
+            date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+
+    def list(self, request, *args, **kwargs):
+        serialized_data = []
+        for entry in self.get_queryset():
+            history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
+            serialized_history = self.serializer_class(history_objects, many=True).data
+            serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
+        return Response(serialized_data)
