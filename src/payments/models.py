@@ -106,6 +106,10 @@ class WithdrawalAsman(models.Model):
         verbose_name='Пользователь',
         on_delete=models.DO_NOTHING
     )
+    address = models.CharField(
+        'Адрес',
+        max_length=255
+    )
     amount = models.FloatField(
         'Сумма',
     )
@@ -118,6 +122,15 @@ class WithdrawalAsman(models.Model):
         'Дата операции',
         default=timezone.now
     )
+    processed = models.BooleanField(
+        default=False
+    )
+    history = models.ForeignKey(
+        'History',
+        verbose_name='Покупка Asman',
+        on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
 
     def __str__(self):
         return f"Вывод от {self.user.email}"
@@ -126,6 +139,29 @@ class WithdrawalAsman(models.Model):
         verbose_name = 'Вывод Asman'
         verbose_name_plural = 'Asman (выводы)'
         ordering = ('-operation_time',)
+
+    def confirm_purchase(self):
+        if self.processed:
+            return False
+        if self.status == 1 and self.amount:
+            self.user.balance -= self.amount
+            self.user.save()
+
+            if self.history:
+                self.history.status = 1
+                self.history.total = self.amount
+                self.history.save()
+            return True
+        if self.status == 0:
+            if self.history:
+                self.history.status = 0
+                self.history.save()
+            return True
+
+    def save(self, *args, **kwargs):
+        if self.confirm_purchase():
+            self.processed = True
+        super().save(*args, **kwargs)
 
 
 class Payment(models.Model):

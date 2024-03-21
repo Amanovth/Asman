@@ -54,8 +54,8 @@ class PaymentsInline(admin.StackedInline):
 
 @admin.register(BuyAsman)
 class BuyAsmanAdmin(admin.ModelAdmin):
-    list_display = ('user', 'operation_time', 'status', 'processed')
-    readonly_fields = ('img', 'operation_time', )
+    list_display = ('user', 'amount', 'operation_time', 'status', 'processed')
+    readonly_fields = ('img', 'operation_time',)
     list_filter = ('status', 'processed')
 
     fields = ('status', 'amount', 'user', 'img', 'operation_time')
@@ -65,6 +65,13 @@ class BuyAsmanAdmin(admin.ModelAdmin):
     #
     # def has_add_permission(self, request):
     #     return False
+
+
+@admin.register(WithdrawalAsman)
+class WithdrawalAsmanAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount', 'operation_time', 'status', 'processed')
+    readonly_fields = ('operation_time',)
+    fields = ('status', 'amount', 'user', 'address', 'operation_time')
 
 
 @admin.register(Payment)
@@ -77,12 +84,6 @@ class PaymentsAdmin(admin.ModelAdmin):
 
     # def has_add_permission(self, request):
     #     return False
-
-
-@admin.register(WithdrawalAsman)
-class WithdrawalAsmanAdmin(admin.ModelAdmin):
-    list_display = ('user', 'amount', 'status', 'operation_time')
-    readonly_fields = ('operation_time',)
 
 
 @admin.register(Transfer)

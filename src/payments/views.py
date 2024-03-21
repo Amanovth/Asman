@@ -18,7 +18,8 @@ from .serializers import (
     PaymentSerializer,
     BuyAsmanSerializer,
     AsmanRateSerializer,
-    PaymentHistorySerializer
+    PaymentHistorySerializer,
+    WithdrawalSerializer
 )
 
 
@@ -78,10 +79,11 @@ class PaymentHistoryView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         # Calculate the date 7 days ago from today
-        date_7_days_ago = timezone.now() - timedelta(days=1)
+        date_7_days_ago = timezone.now() - timedelta(days=7)
 
         # Filter the queryset to include only the last 7 days of history
-        queryset = History.objects.filter(user=self.request.user, operation_time__gte=date_7_days_ago).annotate(date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+        queryset = History.objects.filter(user=self.request.user, operation_time__gte=date_7_days_ago).annotate(
+            date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
 
         serialized_data = []
         for entry in queryset:
@@ -89,3 +91,12 @@ class PaymentHistoryView(generics.ListAPIView):
             serialized_history = self.serializer_class(history_objects, many=True).data
             serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
         return Response(serialized_data)
+
+
+class WithdrawalView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    queryset = WithdrawalAsman.objects.all()
+    serializer_class = WithdrawalSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

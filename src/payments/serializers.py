@@ -52,3 +52,9 @@ class PaymentHistorySerializer(serializers.ModelSerializer):
 
     def get_operation_time(self, obj):
         return obj.operation_time.strftime("%d.%m.%Y, %H:%M")
+
+
+class WithdrawalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WithdrawalAsman
+        fields = ['address', 'amount']

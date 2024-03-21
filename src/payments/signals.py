@@ -5,7 +5,8 @@ from .models import (
     Transfer,
     Payment,
     History,
-    BuyAsman
+    BuyAsman,
+    WithdrawalAsman
 )
 from .services import (
     make_transfer,
@@ -14,13 +15,27 @@ from .services import (
 
 
 @receiver(post_save, sender=BuyAsman)
-def create_history(sender, instance, created, **kwargs):
+def create_history_when_buying_asman(sender, instance, created, **kwargs):
     if created:
         obj = History.objects.create(
             user=instance.user,
             status=instance.status,
             info='Покупка Asman',
             total=0,
+            operation_time=instance.operation_time
+        )
+        instance.history = obj
+        instance.save()
+
+
+@receiver(post_save, sender=WithdrawalAsman)
+def create_history_when_withdrawing_asman(sender, instance, created, **kwargs):
+    if created:
+        obj = History.objects.create(
+            user=instance.user,
+            status=instance.status,
+            info='Вывод Asman',
+            total=instance.amount,
             operation_time=instance.operation_time
         )
         instance.history = obj
