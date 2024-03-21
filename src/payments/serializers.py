@@ -41,7 +41,7 @@ class PaymentHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = History
-        fields = ['recipient', 'info', 'total', 'operation_time', 'status']
+        fields = ['recipient', 'info', 'total', 'date', 'time', 'status']
 
     def get_recipient(self, obj):
         if obj.recipient:
