@@ -22,6 +22,7 @@ def create_history_when_buying_asman(sender, instance, created, **kwargs):
             status=instance.status,
             info='Покупка Asman',
             total=0,
+            type=1,
             operation_time=instance.operation_time
         )
         instance.history = obj
@@ -34,6 +35,7 @@ def create_history_when_withdrawing_asman(sender, instance, created, **kwargs):
         obj = History.objects.create(
             user=instance.user,
             status=instance.status,
+            type=2,
             info='Вывод Asman',
             total=instance.amount,
             operation_time=instance.operation_time
@@ -73,6 +75,7 @@ def make_payment_on_save(sender, instance, created, **kwargs):
             user=instance.user,
             partner=instance.partner,
             status=1,
+            type=2,
             info="Покупка услуг",
             total=instance.partner.cost_of_visit,
             operation_time=instance.operation_time
