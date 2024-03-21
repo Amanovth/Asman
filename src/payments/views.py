@@ -60,21 +60,26 @@ class BuyAsmanView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response({'response': True})
+        return Response({'response': False})
+
 
 class PaymentHistoryView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
     serializer_class = PaymentHistorySerializer
 
-    def list(self, request, *args, **kwargs):
-        # Calculate the date 7 days ago from today
-        date_7_days_ago = timezone.now() - timedelta(days=7)
-
-        # Filter the queryset to include only the last 7 days of history
-        queryset = History.objects.filter(user=self.request.user, operation_time__gte=date_7_days_ago).annotate(
+    def get_queryset(self):
+        days = timezone.now() - timedelta(days=int(self.request.query_params.get('days')))
+        return History.objects.filter(user=self.request.user, operation_time__gte=days).annotate(
             date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
 
+    def list(self, request, *args, **kwargs):
         serialized_data = []
-        for entry in queryset:
+        for entry in self.get_queryset():
             history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
             serialized_history = self.serializer_class(history_objects, many=True).data
             serialized_data.append({'date': entry['date'].strftime('%d.%m.%Y'), 'list': serialized_history})
@@ -88,3 +93,10 @@ class WithdrawalView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response({'response': True})
+        return Response({'response': False})
