@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'src.payments',
     'src.market',
     'src.main',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -45,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,3 +159,9 @@ REST_FRAMEWORK = {
 # }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '62.109.17.80',
+    'orozmat.mirzabekov.fvds.ru'
+]
