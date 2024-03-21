@@ -70,7 +70,7 @@ class BuyAsmanAdmin(admin.ModelAdmin):
 @admin.register(Payment)
 class PaymentsAdmin(admin.ModelAdmin):
     list_display = ('user', 'partner', 'operation_time')
-    readonly_fields = ('operation_time',)
+    # readonly_fields = ('operation_time',)
 
     # def has_delete_permission(self, request, obj=None):
     #     return False

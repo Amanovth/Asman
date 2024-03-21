@@ -1,5 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from django.db.models.functions import TruncDate
+from django.db.models import Count
 
 from .models import (
     BuyAsman,
@@ -72,5 +74,11 @@ class PaymentHistoryView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
     serializer_class = PaymentHistorySerializer
 
-    def get_queryset(self):
-        return History.objects.filter(user=self.request.user)
+    def list(self, request, *args, **kwargs):
+        queryset = History.objects.filter(user=self.request.user).annotate(date=TruncDate('operation_time')).values('date').annotate(history_list=Count('pk')).order_by('-date')
+        serialized_data = []
+        for entry in queryset:
+            history_objects = History.objects.filter(user=self.request.user, operation_time__date=entry['date'])
+            serialized_history = self.serializer_class(history_objects, many=True).data
+            serialized_data.append({'date': entry['date'], 'list': serialized_history})
+        return Response(serialized_data)

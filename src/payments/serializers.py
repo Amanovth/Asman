@@ -1,3 +1,4 @@
+from collections import defaultdict
 from rest_framework import serializers
 
 from .models import (
@@ -36,12 +37,11 @@ class AsmanRateSerializer(serializers.ModelSerializer):
 
 class PaymentHistorySerializer(serializers.ModelSerializer):
     recipient = serializers.SerializerMethodField()
-    date = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
+    operation_time = serializers.SerializerMethodField()
 
     class Meta:
         model = History
-        fields = ['recipient', 'info', 'total', 'date', 'time', 'status']
+        fields = ['recipient', 'info', 'total', 'operation_time', 'status']
 
     def get_recipient(self, obj):
         if obj.recipient:
@@ -50,8 +50,5 @@ class PaymentHistorySerializer(serializers.ModelSerializer):
             return obj.partner.title
         return False
 
-    def get_date(self, obj):
-        return obj.operation_time.strftime("%d.%m.%Y")
-
-    def get_time(self, obj):
-        return obj.operation_time.strftime("%H:%M")
+    def get_operation_time(self, obj):
+        return obj.operation_time.strftime("%d.%m.%Y, %H:%M")
