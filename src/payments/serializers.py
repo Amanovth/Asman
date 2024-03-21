@@ -36,6 +36,7 @@ class AsmanRateSerializer(serializers.ModelSerializer):
 
 class PaymentHistorySerializer(serializers.ModelSerializer):
     recipient = serializers.SerializerMethodField()
+    operation_time = serializers.SerializerMethodField()
 
     class Meta:
         model = History
@@ -47,3 +48,6 @@ class PaymentHistorySerializer(serializers.ModelSerializer):
         elif obj.partner:
             return obj.partner.title
         return False
+
+    def get_operation_time(self, obj):
+        return obj.operation_time.strftime("%d.%m.%Y, %H:%M")
