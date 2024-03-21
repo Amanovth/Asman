@@ -98,7 +98,7 @@ class HistoryAdmin(admin.ModelAdmin):
 
     def get_recipient(self, object):
         if object.recipient:
-            return object.recipient
+            return f'{object.recipient.first_name} {object.recipient.last_name[0]}'
         return object.partner
 
     def get_readonly_fields(self, request, obj=None):
