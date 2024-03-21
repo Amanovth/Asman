@@ -62,6 +62,7 @@ class BuyAsman(models.Model):
     class Meta:
         verbose_name = 'Покупка Asman'
         verbose_name_plural = 'Asman (покупки)'
+        ordering = ('-operation_time',)
 
     def confirm_purchase(self):
         if self.processed:
@@ -110,6 +111,7 @@ class WithdrawalAsman(models.Model):
     class Meta:
         verbose_name = 'Вывод Asman'
         verbose_name_plural = 'Asman (выводы)'
+        ordering = ('-operation_time',)
 
 
 class Payment(models.Model):
@@ -132,6 +134,7 @@ class Payment(models.Model):
     class Meta:
         verbose_name = 'Покупка услуги'
         verbose_name_plural = 'Покупки услуг'
+        ordering = ('-operation_time',)
 
 
 class Transfer(models.Model):
@@ -161,9 +164,15 @@ class Transfer(models.Model):
     class Meta:
         verbose_name = 'Перевод'
         verbose_name_plural = 'Переводы'
+        ordering = ('-operation_time',)
 
 
 class History(models.Model):
+    STATUS_CHOICES = (
+        (1, 'Успешно'),
+        (0, 'Ошибка'),
+        (2, 'В обработке')
+    )
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -173,7 +182,21 @@ class History(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Плательщик',
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        related_name='user1'
+    )
+    recipient = models.ForeignKey(
+        User,
+        verbose_name='Получатель',
+        on_delete=models.DO_NOTHING,
+        null=True, blank=True,
+        related_name='user2'
+    )
+    partner = models.ForeignKey(
+        Partner,
+        verbose_name='Партнер',
+        on_delete=models.DO_NOTHING,
+        null=True, blank=True
     )
     info = models.CharField(
         'Тип платежа',
@@ -184,3 +207,16 @@ class History(models.Model):
         'Дата операции',
         default=timezone.now,
     )
+    status = models.IntegerField(
+        'Статус',
+        choices=STATUS_CHOICES,
+        default=2
+    )
+
+    def __str__(self):
+        return self.user.email
+
+    class Meta:
+        verbose_name = 'Платеж'
+        verbose_name_plural = 'История платежей'
+        ordering = ('-operation_time',)

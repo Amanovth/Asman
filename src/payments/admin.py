@@ -6,7 +6,8 @@ from .models import (
     Payment,
     WithdrawalAsman,
     Transfer,
-    AsmanRate
+    AsmanRate,
+    History
 )
 
 
@@ -54,7 +55,7 @@ class PaymentsInline(admin.StackedInline):
 @admin.register(BuyAsman)
 class BuyAsmanAdmin(admin.ModelAdmin):
     list_display = ('user', 'operation_time', 'status', 'processed')
-    readonly_fields = ('img', 'operation_time', 'user')
+    readonly_fields = ('img', 'operation_time', )
     list_filter = ('status', 'processed')
 
     fields = ('status', 'amount', 'user', 'img', 'operation_time')
@@ -68,7 +69,8 @@ class BuyAsmanAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentsAdmin(admin.ModelAdmin):
-    list_display = ('user',)
+    list_display = ('user', 'partner', 'operation_time')
+    readonly_fields = list_display
 
     # def has_delete_permission(self, request, obj=None):
     #     return False
@@ -87,6 +89,31 @@ class WithdrawalAsmanAdmin(admin.ModelAdmin):
 class TransferAdmin(admin.ModelAdmin):
     list_display = ('payer', 'recipient', 'amount', 'operation_time')
     readonly_fields = ('operation_time',)
+
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'info', 'get_recipient', 'total', 'operation_time')
+    readonly_fields = ('user', 'info', 'total', 'operation_time', 'partner', 'recipient')
+
+    def get_recipient(self, object):
+        if object.recipient:
+            return object.recipient
+        return object.partner
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(self.readonly_fields)
+        if not obj or (not obj.partner and not obj.recipient):
+            readonly_fields.append('status')
+        return readonly_fields
+
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+    def has_add_permission(self, request):
+        return False
+
+    get_recipient.short_description = 'Имя получателя'
 
 
 admin.site.unregister(Group)

@@ -14,7 +14,6 @@ from .serializers import (
     BuyAsmanSerializer,
     AsmanRateSerializer
 )
-from .services import payment_limit
 
 
 class ScannerView(generics.GenericAPIView):
@@ -40,16 +39,12 @@ class ScannerView(generics.GenericAPIView):
             else:
                 # If the type is not 1, it's a Payment
                 # Set the user as the current user
-                limit = payment_limit(request)
-                if limit['response']:
-                    serializer.validated_data['user'] = request.user
-                    serializer.save()
-                    return Response({'response': True})
-                return Response({'response': limit['response'], 'days': limit['days']})
+                serializer.validated_data['user'] = request.user
+                serializer.save()
 
             return Response({'response': True})
         else:
-            return Response(serializer.errors)
+            return Response({'response': False})
 
 
 class BuyAsmanView(generics.CreateAPIView):

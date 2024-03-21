@@ -12,7 +12,7 @@ class PartnerCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Partner)
 class PartnersAdmin(admin.ModelAdmin):
-    list_display = ('title', 'cat', 'get_html_img')
+    list_display = ('title', 'cat', 'get_html_img', 'id')
     list_display_links = ('title',)
     readonly_fields = ('qr', 'total_visits',)
 
