@@ -49,6 +49,9 @@ class AsmanRate(models.Model):
         'Курс'
     )
 
+    def __str__(self):
+        return self.rate
+
     class Meta:
         verbose_name = 'Курс Asman'
         verbose_name_plural = 'Курс Asman'
