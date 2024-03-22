@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'ckeditor',
+    'smart_selects',
 
     # local apps
     'src.accounts',
@@ -161,6 +162,8 @@ REST_FRAMEWORK = {
 # }
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+JQUERY_URL = True
 
 INTERNAL_IPS = [
     '127.0.0.1',

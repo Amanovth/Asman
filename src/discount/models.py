@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from smart_selects.db_fields import GroupedForeignKey
 
 
 class Status(models.Model):
@@ -60,8 +61,14 @@ class Partner(models.Model):
     cost_of_visit = models.FloatField(
         'Стоимость посещения'
     )
-    cat = models.ForeignKey(
+    status = models.ForeignKey(
+        Status,
+        on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
+    cat = GroupedForeignKey(
         PartnerCategory,
+        'status',
         verbose_name='Категория',
         on_delete=models.CASCADE,
         related_name='partners'

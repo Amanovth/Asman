@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/discount/', include('src.discount.urls')),
     path('api/ckeditor/', include('ckeditor_uploader.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('api/chaining/', include('smart_selects.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += docs
