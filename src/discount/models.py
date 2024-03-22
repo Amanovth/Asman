@@ -11,7 +11,10 @@ class Status(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.status
+
+    class Meta:
+        ordering = ('id',)
 
 
 class PartnerCategory(models.Model):
