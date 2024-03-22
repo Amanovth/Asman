@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Partner, PartnerCategory
+from .models import Partner, PartnerCategory, Status
+
+admin.site.register(Status)
 
 
 @admin.register(PartnerCategory)

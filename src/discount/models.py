@@ -4,6 +4,16 @@ from django.utils import timezone
 from ckeditor.fields import RichTextField
 
 
+class Status(models.Model):
+    status = models.CharField(
+        'Название',
+        max_length=255
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class PartnerCategory(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -14,6 +24,13 @@ class PartnerCategory(models.Model):
     name = models.CharField(
         'Название',
         max_length=255
+    )
+    status = models.ForeignKey(
+        Status,
+        verbose_name='Статус',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='categories'
     )
 
     def __str__(self) -> str:

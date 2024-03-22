@@ -2,10 +2,10 @@ from rest_framework import serializers
 from django.utils import timezone
 
 from src.payments.models import Payment
-from .models import PartnerCategory, Partner
+from .models import PartnerCategory, Partner, Status
 
 
-class PartnersSerializer(serializers.ModelSerializer):
+class PartnerSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,9 +21,17 @@ class PartnersSerializer(serializers.ModelSerializer):
         return (timezone.now() - last_payment.order_by('-operation_time').first().operation_time).days
 
 
-class DiscountListSerializer(serializers.ModelSerializer):
-    partners = PartnersSerializer(many=True)
+class CategoryListSerializer(serializers.ModelSerializer):
+    partners = PartnerSerializer(many=True)
 
     class Meta:
         model = PartnerCategory
         fields = ['name', 'partners']
+
+
+class DiscountListSerializer(serializers.ModelSerializer):
+    categories = CategoryListSerializer(many=True)
+
+    class Meta:
+        model = Status
+        fields = ['id', 'status', 'categories']
