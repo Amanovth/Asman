@@ -61,6 +61,10 @@ class Partner(models.Model):
     cost_of_visit = models.FloatField(
         'Стоимость посещения'
     )
+    discount = models.IntegerField(
+        'Скидка',
+        default=10
+    )
     status = models.ForeignKey(
         Status,
         on_delete=models.SET_NULL,

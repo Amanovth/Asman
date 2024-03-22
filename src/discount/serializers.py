@@ -10,7 +10,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partner
-        fields = ['id', 'title', 'description', 'img', 'days']
+        fields = ['id', 'discount', 'title', 'description', 'img', 'days']
 
     def get_days(self, obj):
         last_payment = Payment.objects.filter(partner=obj)
