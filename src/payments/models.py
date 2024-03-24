@@ -61,6 +61,11 @@ class BuyAsman(models.Model):
             self.user.balance += self.amount
             self.user.save()
 
+            if self.user.referred_by:
+                bonus = self.amount * 0.15
+                self.user.referred_by.balance += bonus
+                self.user.referred_by.save()
+
             if self.history:
                 self.history.status = 1
                 self.history.total = self.amount
