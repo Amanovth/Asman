@@ -14,6 +14,11 @@ class User(AbstractUser):
         editable=False,
         max_length=36
     )
+    referred_by = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
     qr = models.ImageField(
         'QR',
         null=True, blank=True,

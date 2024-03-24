@@ -12,7 +12,7 @@ from src.payments.admin import BuyAsmanInline, PaymentsInline
 class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'email', 'first_name', 'last_name')
     fieldsets = (
-        (None, {'fields': ('balance', 'username', 'first_name', 'last_name',
+        (None, {'fields': ('referred_by', 'balance', 'username', 'first_name', 'last_name',
                            'email', 'phone', 'profile_photo', 'v_code', 'verified', 'qr',)}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )

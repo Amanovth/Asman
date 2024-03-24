@@ -27,6 +27,22 @@ class RegisterView(generics.CreateAPIView):
         return Response(serializer.errors)
 
 
+class RegisterReferralView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, ref_code):
+        try:
+            referred_by_user = User.objects.get(id=ref_code)
+        except ObjectDoesNotExist:
+            return Response({'response': False})
+
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(referred_by=referred_by_user)
+            return Response({'response': True})
+        return Response(serializer.errors)
+
+
 class VerifyEmailView(generics.GenericAPIView):
     serializer_class = VerifyEmailSerializer
 

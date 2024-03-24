@@ -8,11 +8,13 @@ from .views import (
     ChangePasswordView,
     UserInfoView,
     UpdatePhotoView,
+    RegisterReferralView
 )
 
 urlpatterns = [
     # Authentication
     path('register/', RegisterView.as_view(), name='auth-register'),
+    path('register/<str:ref_code>', RegisterReferralView.as_view(), name='auth-register'),
     path('verify-email/', VerifyEmailView.as_view(), name='auth-verify-email'),
     path('login/', LoginView.as_view(), name='auth-login'),
     path('forgot-password/', ForgotPasswordView.as_view(), name='auth-forgot-password'),
