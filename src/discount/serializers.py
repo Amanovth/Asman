@@ -26,7 +26,7 @@ class PartnerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partner
-        fields = ['id', 'title', 'description', 'img', 'days', ]
+        fields = ['id', 'title', 'description', 'img', 'days', 'discount',]
 
     def get_days(self, obj):
         user = self.context['request'].user
