@@ -54,6 +54,11 @@ class User(AbstractUser):
         'Количество монет',
         default=0
     )
+    status = models.CharField(
+        'Статус',
+        max_length=20,
+        default='Стандарт'
+    )
     profile_photo = models.ImageField(
         'Фото профиля',
         default='user.png', upload_to='profile_photos'
@@ -68,6 +73,21 @@ class User(AbstractUser):
         token, created = Token.objects.get_or_create(user=self)
         return token.key
 
+    def save(self, *args, **kwargs):
+        statuses = UserStatuses.objects.first()
+        if self.balance >= statuses.vip:
+            self.status = 'VIP'
+        elif self.balance >= statuses.gold:
+            self.status = 'Золото'
+        elif self.balance >= statuses.silver:
+            self.status = 'Серебро'
+        elif self.balance >= statuses.bronze:
+            self.status = 'Бронза'
+        else:
+            self.status = 'Стандарт'
+        
+        return super().save()
+        
 
 class UserStatuses(models.Model):
     standard = models.FloatField('Стандарт')

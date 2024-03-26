@@ -2,7 +2,6 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
-from smart_selects.db_fields import GroupedForeignKey
 
 
 class PartnerCategory(models.Model):

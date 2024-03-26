@@ -53,17 +53,10 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
-
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'phone',
                   'profile_photo', 'balance', 'status', 'qr']
-
-    def get_status(self, obj):
-        asman_rate = UserStatuses.objects.first()
-
-        return calculate_user_status(obj.balance, asman_rate)
 
 
 class UpdatePhotoSerializer(serializers.ModelSerializer):
