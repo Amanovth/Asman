@@ -25,14 +25,31 @@ class PartnerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partner
-        fields = ['id', 'title', 'description', 'img', 'days',
-                  'v_standard', 'v_bronze', 'v_silver', 'v_gold', 'v_vip']
+        fields = ['id', 'title', 'description', 'img', 'days', ]
 
     def get_days(self, obj):
         user = self.context['request'].user
-        last_payment = Payment.objects.filter(partner=obj, user=user)
+        status = user.status
+        payments = Payment.objects.filter(partner=obj, user=user)
 
-        if not last_payment.exists():
+        if not payments.exists():
             return True
 
-        return (timezone.now() - last_payment.order_by('-operation_time').first().operation_time).days
+        days_from_last_payment = (timezone.now() - payments.order_by('-operation_time').first().operation_time).days
+
+        days = 0
+
+        if status == 'Стандарт':
+            days = obj.v_standard - days_from_last_payment
+        if status == 'Бронза':
+            days = obj.v_bronze - days_from_last_payment
+        if status == 'Серебро':
+            days = obj.v_silver - days_from_last_payment
+        if status == 'Золото':
+            days = obj.v_gold - days_from_last_payment
+        if status == 'VIP':
+            days = obj.v_vip - days_from_last_payment
+
+        if days <= 0:
+            return True
+        return days
