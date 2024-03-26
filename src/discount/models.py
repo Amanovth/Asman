@@ -5,19 +5,6 @@ from ckeditor.fields import RichTextField
 from smart_selects.db_fields import GroupedForeignKey
 
 
-class Status(models.Model):
-    status = models.CharField(
-        'Название',
-        max_length=255
-    )
-
-    def __str__(self):
-        return self.status
-
-    class Meta:
-        ordering = ('id',)
-
-
 class PartnerCategory(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -28,13 +15,6 @@ class PartnerCategory(models.Model):
     name = models.CharField(
         'Название',
         max_length=255
-    )
-    status = models.ForeignKey(
-        Status,
-        verbose_name='Статус',
-        on_delete=models.CASCADE,
-        null=True, blank=True,
-        related_name='categories'
     )
 
     def __str__(self) -> str:
@@ -61,20 +41,10 @@ class Partner(models.Model):
     cost_of_visit = models.FloatField(
         'Стоимость посещения'
     )
-    discount = models.IntegerField(
-        'Скидка',
-        default=10
-    )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.SET_NULL,
-        null=True, blank=True
-    )
-    cat = GroupedForeignKey(
+    cat = models.ForeignKey(
         PartnerCategory,
-        'status',
-        verbose_name='Категория',
         on_delete=models.CASCADE,
+        verbose_name='Категория',
         related_name='partners'
     )
     title = models.CharField(
@@ -102,6 +72,18 @@ class Partner(models.Model):
         'Дата регистрации',
         default=timezone.now
     )
+
+    d_standard = models.IntegerField('Скидка (Standard)', blank=True)
+    d_bronze = models.IntegerField('Скидка (Bronze)', blank=True)
+    d_silver = models.IntegerField('Скидка (Silver)', blank=True)
+    d_gold = models.IntegerField('Скидка (Gold)', blank=True)
+    d_vip = models.IntegerField('Скидка (VIP)', blank=True)
+
+    v_standard = models.IntegerField('Посещения (Standard)', blank=True)
+    v_bronze = models.IntegerField('Посещения (Bronze)', blank=True)
+    v_silver = models.IntegerField('Посещения (Silver)', blank=True)
+    v_gold = models.IntegerField('Посещения (Gold)', blank=True)
+    v_vip = models.IntegerField('Посещения (VIP)', blank=True)
 
     def __str__(self):
         return self.title

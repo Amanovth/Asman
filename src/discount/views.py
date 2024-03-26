@@ -1,19 +1,19 @@
 from rest_framework import generics
 from rest_framework.response import Response
 
-from .models import PartnerCategory, Partner, Status
+from .models import PartnerCategory, Partner
 from .serializers import (
-    DiscountListSerializer,
-    PartnerSerializer
+    PartnerDetailSerializer,
+    CategoryListSerializer
 )
 
 
 class DiscountListView(generics.ListAPIView):
-    serializer_class = DiscountListSerializer
-    queryset = Status.objects.all()
+    serializer_class = CategoryListSerializer
+    queryset = PartnerCategory.objects.all()
 
 
 class DiscountDetailView(generics.RetrieveAPIView):
     queryset = Partner.objects.all()
-    serializer_class = PartnerSerializer
+    serializer_class = PartnerDetailSerializer
     lookup_field = 'id'

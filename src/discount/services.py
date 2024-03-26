@@ -1,6 +1,8 @@
 import os
 import qrcode
+from django.utils import timezone
 from django.conf import settings
+from src.payments.models import Payment
 
 
 def generate_partner_qrcode(instance):
@@ -11,3 +13,12 @@ def generate_partner_qrcode(instance):
     instance.save()
 
     return instance
+
+
+def get_last_payment(partner, user):
+    last_payment = Payment.objects.filter(partner=partner, user=user)
+
+    if not last_payment.exists():
+        return True
+
+    return (timezone.now() - last_payment.order_by('-operation_time').first().operation_time).days
