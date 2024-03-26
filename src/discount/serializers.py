@@ -22,6 +22,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 class PartnerDetailSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField()
+    discount = serializers.SerializerMethodField()
 
     class Meta:
         model = Partner
@@ -53,3 +54,18 @@ class PartnerDetailSerializer(serializers.ModelSerializer):
         if days <= 0:
             return True
         return days
+
+    def get_discount(self, obj):
+        user = self.context['request'].user
+        status = user.status
+
+        if status == 'Стандарт':
+            return obj.d_standard
+        if status == 'Бронза':
+            return obj.d_bronze
+        if status == 'Серебро':
+            return obj.d_silver
+        if status == 'Золото':
+            return obj.d_gold
+        if status == 'VIP':
+            return obj.d_vip
